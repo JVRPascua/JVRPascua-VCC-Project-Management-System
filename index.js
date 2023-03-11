@@ -18,7 +18,9 @@ app.use(bodyParser.json({ limit: '30mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
 
+if (process.env.NODE_ENV === "production") {
 app.use(express.static(path.resolve(__dirname, "vcc-pms/build")));
+}
 
 app.use('/projects', projectsRoutes);
 app.use('/auth', authRoutes);
@@ -31,6 +33,6 @@ app.get('/*', function (req, res) {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT || 5000, () => {
+app.listen(PORT, () => {
     console.log(`App running on port ${PORT}.`);
  });
