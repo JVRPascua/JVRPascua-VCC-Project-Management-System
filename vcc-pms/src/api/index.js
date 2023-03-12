@@ -1,7 +1,7 @@
 import axios from "axios";
 
 let development = process.env.NODE_ENV !== 'production'
-const API = axios.create({ baseURL:  development ? 'http://localhost:5000' : 'https://vcc-project-management-system.herokuapp.com'});
+const API = axios.create({ baseURL:  development ? 'http://localhost:5000' : 'https://vccpms.com'});
 
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('profile')) {
