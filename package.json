@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "heroku-postbuild": "cd vcc-pms && npm install --legacy-peer-deps && npm run build"
+    "heroku-postbuild": "cd vcc-pms && npm install serve --legacy-peer-deps && npm run build"
   },
   "keywords": [],
   "author": "",
