@@ -19,8 +19,6 @@ app.use(bodyParser.json({ limit: '30mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, "vcc-pms/build")));
-
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "vcc-pms/build")));
 }
