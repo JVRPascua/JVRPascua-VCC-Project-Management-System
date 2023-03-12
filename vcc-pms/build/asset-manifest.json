@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/static/css/main.41ca65b6.css",
-    "main.js": "/static/js/main.8c84334c.js",
+    "main.js": "/static/js/main.54e2cdd5.js",
     "static/media/vcclogo.png": "/static/media/vcclogo.700ff1d89aa0f0bc0539.png",
     "index.html": "/index.html",
     "main.41ca65b6.css.map": "/static/css/main.41ca65b6.css.map",
-    "main.8c84334c.js.map": "/static/js/main.8c84334c.js.map"
+    "main.54e2cdd5.js.map": "/static/js/main.54e2cdd5.js.map"
   },
   "entrypoints": [
     "static/css/main.41ca65b6.css",
-    "static/js/main.8c84334c.js"
+    "static/js/main.54e2cdd5.js"
   ]
 }
