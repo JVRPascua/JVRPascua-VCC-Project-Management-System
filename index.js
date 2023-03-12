@@ -13,13 +13,16 @@ const app = express();
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json({ limit: '30mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
 
+app.use(express.static(path.join(__dirname, "vcc-pms/build")));
+
 if (process.env.NODE_ENV === "production") {
-app.use(express.static(path.resolve(__dirname, "vcc-pms/build")));
+    app.use(express.static(path.join(__dirname, "vcc-pms/build")));
 }
 
 app.use('/projects', projectsRoutes);
@@ -31,6 +34,6 @@ app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'vcc-pms/build', 'index.html'));
 });
 
-app.listen(process.env.PORT || 5000, () => {
-    console.log(`App running.`);
+app.listen(PORT, () => {
+    console.log(`App running on port ${PORT}.`);
  });
