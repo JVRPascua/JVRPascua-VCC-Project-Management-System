@@ -23,8 +23,11 @@ const Paginate = () => {
     const isPage = page > 0;
     
     useEffect(() => {
-       if(page) dispatch(getProjects(page, userId));
-   }, [dispatch, page, userId]);
+        // Check if user ID is valid before dispatching the action
+        if (user && user.result && user.result.rows && user.result.rows[0] && user.result.rows[0].users_id) {
+            dispatch(getProjects(page, userId));
+        }
+     }, [dispatch, page]);
 
 //    const getProjectsQuery = useQuery({
 //        queryKey: ["projects", {page, userId}],
