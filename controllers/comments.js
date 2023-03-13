@@ -6,7 +6,7 @@ export const comment = async (req,res) => {
     const { userId } = req.query;
     const { projectId } = req.query;
     const comment_text = value.commentText;
-    const comment_image = Buffer.from(value.selectedFile, 'base64');
+    const comment_image = value.selectedFile;
     try {
         if(id && value && userId && projectId){
             const newComment = await pool.query("INSERT INTO comments_tbl (comment_date, comment_text, comment_image, comment_user, task, project) VALUES(NOW(), $1, $2, $3, $4, $5) RETURNING *", [comment_text, comment_image, userId, id, projectId]);
