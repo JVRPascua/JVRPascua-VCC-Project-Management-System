@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Typography, TextField, Button, Divider } from "@mui/material";
 import FileBase from 'react-file-base64';
+import {Buffer} from 'buffer';
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { commentTask, getTaskComments } from '../../actions/comments.js';
@@ -52,7 +53,7 @@ const CommentSection = ({ task }) => {
                     {comment.comment_text}
                     {comment.comment_image &&
                         <div> 
-                            <img height="300" width="450" src={`data:image/jpeg;base64,${Buffer.from(comment.comment_image, 'hex').toString('base64')}`} alt=" " />
+                            <img height="300" width="450" src={`data:image/jpeg;base64,${Buffer.from(comment.comment_image.slice(2), 'hex').toString('base64')}`} alt=" " />
                         </div>
                     }
                     </Typography>
