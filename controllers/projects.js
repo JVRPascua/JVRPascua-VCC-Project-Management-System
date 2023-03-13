@@ -24,7 +24,7 @@ export const getProjects = async (req, res) => {
     try{
         const { page, userId } = req.query;
         const pg = parseInt(page);
-        const id = parseInt(userId);
+        const id = Number.isInteger(parseInt(userId)) ? parseInt(userId) : null; // add error handling here
         const limit = 6;
         const total = await pool.query("SELECT COUNT(projects_id) AS exact_count FROM projects_tbl");
         const totalProjectId = parseInt(total.rows[0].exact_count);
@@ -32,10 +32,13 @@ export const getProjects = async (req, res) => {
             const result = await pool.query("SELECT * FROM projects_tbl ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)",[pg, limit]);
             res.status(200).json({ data: result.rows, currentPage: pg, numberOfPages: Math.ceil(totalProjectId / limit) });
         }
-        else{
+        else if(id){
             const result = await pool.query("SELECT * FROM projects_tbl WHERE project_manager = $3 ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)",[pg, limit, id]);
             const totalProjects = result.rowCount;
             res.status(200).json({ data: result.rows, currentPage: pg, numberOfPages: Math.ceil(totalProjects / limit) });
+        }
+        else{
+            res.status(404).json({ error: "Invalid user ID" }); // return error message if userId is not valid integer
         }
     } catch (error) {
         res.status(404).json({ error });
