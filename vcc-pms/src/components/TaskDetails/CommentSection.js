@@ -51,10 +51,8 @@ const CommentSection = ({ task }) => {
                     <Typography marginTop key={comment.id} align="left" marginLeft gutterBottom variant="subtitle1">
                     <strong>{commentUser[comment.comment_user]}: </strong>
                     {comment.comment_text}
-                    {comment.comment_image &&
-                        <div> 
-                            <img height="300" width="450" src={`data:image/jpeg;base64,${Buffer.from(comment.comment_image.startsWith('\\x') ? comment.comment_image.slice(2) : comment.comment_image, 'hex').toString('base64')}`} alt=" " />
-                        </div>
+                    {comment.comment_image && typeof comment.comment_image === 'string' && comment.comment_image.startsWith('\\x') &&
+                    <img src={`data:image/jpeg;base64,${Buffer.from(comment.comment_image.slice(2), 'hex').toString('base64')}`} alt=" " height="300" width="450"/>
                     }
                     </Typography>
                     ))}
