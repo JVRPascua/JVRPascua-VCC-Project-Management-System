@@ -49,11 +49,9 @@ const CommentSection = ({ task }) => {
                     <Typography marginTop key={comment.id} align="left" marginLeft gutterBottom variant="subtitle1">
                     <strong>{commentUser[comment.comment_user]}: </strong>
                     {comment.comment_text}
-                    {comment.comment_image &&
                         <div> 
                             <img height="300" width="450" src={`data:image/jpeg;${comment.comment_image}`} alt=" " /> 
                         </div>
-                    }
                     </Typography>
                     ))}
                 <div ref={commentsRef} />
