@@ -22,18 +22,23 @@ const Paginate = () => {
     const dispatch = useDispatch();
     const isPage = page > 0;
     
-    useEffect(() => {
+//    useEffect(() => {
         // Check if user ID is valid before dispatching the action
-        if (user && user.result && user.result.rows && user.result.rows[0] && user.result.rows[0].users_id) {
-            dispatch(getProjects(page, userId));
-        }
-     }, [dispatch, page]);
+//        if (user && user.result && user.result.rows && user.result.rows[0] && user.result.rows[0].users_id) {
+//            dispatch(getProjects(page, userId));
+//        }
+//     }, [dispatch, page]);
 
 //    const getProjectsQuery = useQuery({
 //        queryKey: ["projects", {page, userId}],
 //        enabled: isPage,
 //        queryFn: dispatch(getProjects({page, userId})),
 //    });
+const getProjectsQuery = useQuery(["projects", page, userId], () => {
+    if (isPage && userId) {
+      dispatch(getProjects(page, userId));
+    }
+  });
 
     return (
         <Pagination 
