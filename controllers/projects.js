@@ -44,7 +44,9 @@ export const getProjects = async (req, res) => {
 export const createProjects = async (req, res) => {
     try {
         const { project_name, budget, start_date, end_date, description, project_manager } = req.body;
-        const newProject = await pool.query("INSERT INTO projects_tbl (project_name, budget, start_date, end_date, description, project_manager) VALUES($1, $2, $3, $4, $5, $6) RETURNING *", [project_name, budget, start_date, end_date, description, project_manager]);
+        const sDate = new Date(start_date);
+        const eDate = new Date(end_date);
+        const newProject = await pool.query("INSERT INTO projects_tbl (project_name, budget, start_date, end_date, description, project_manager) VALUES($1, $2, $3, $4, $5, $6) RETURNING *", [project_name, budget, sDate, eDate, description, project_manager]);
          res.json(newProject.rows[0]);
     } catch (error) {
         res.status(409).json({ message: error });

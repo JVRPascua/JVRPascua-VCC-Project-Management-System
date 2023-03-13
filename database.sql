@@ -34,7 +34,7 @@ CREATE TABLE comments_tbl(
     comment_id SERIAL PRIMARY KEY,
     comment_date DATE,
     comment_text VARCHAR(1000),
-    comment_image BYTEA,
+    comment_image VARCHAR,
     comment_user INT,
     task INT references tasks_tbl(tasks_id),
     project INT references projects_tbl(projects_id)
