@@ -17,6 +17,7 @@ const CommentSection = ({ task }) => {
     const [comments, setComments] = useState((state) => state?.comments);
     const id = task[0]?.tasks_id;
     const commentsRef = useRef();
+    const dataImagePrefix = `data:image/png;base64,`
 
     const getTaskCommentsQuery = useQuery({
         queryKey: ["taskcomments", id],
@@ -50,7 +51,7 @@ const CommentSection = ({ task }) => {
                     <strong>{commentUser[comment.comment_user]}: </strong>
                     {comment.comment_text}
                         <div> 
-                            <img height="300" width="450" src={comment.comment_image} alt=" " /> 
+                            <img height="300" width="450" src={`${dataImagePrefix}${comment.comment_image.toString('base64')}`} alt=" " /> 
                         </div>
                     </Typography>
                     ))}
