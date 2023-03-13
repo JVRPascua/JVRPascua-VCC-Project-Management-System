@@ -50,7 +50,7 @@ const CommentSection = ({ task }) => {
                     <strong>{commentUser[comment.comment_user]}: </strong>
                     {comment.comment_text}
                         <div> 
-                            <img height="300" width="450" src={comment.encode} alt=" " /> 
+                            <img height="300" width="450" src={comment.comment_image} alt=" " /> 
                         </div>
                     </Typography>
                     ))}

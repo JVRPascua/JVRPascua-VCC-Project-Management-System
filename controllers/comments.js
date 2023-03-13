@@ -20,7 +20,7 @@ export const comment = async (req,res) => {
 export const getComments = async (req,res) => {
     try {
         const { id } = req.params;
-        const commentsTask = await pool.query("SELECT comment_id, comment_date, comment_text, encode(comment_image, 'base64'), comment_user, task FROM comments_tbl WHERE task = $1 ORDER BY comment_date", [id]);
+        const commentsTask = await pool.query("SELECT comment_id, comment_date, comment_text, ENCODE(comment_image,'base64'), comment_user, task FROM comments_tbl WHERE task = $1 ORDER BY comment_date", [id]);
         res.status(200).json(commentsTask.rows);
     } catch (error) {
         res.status(404).json({ error });
