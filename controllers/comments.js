@@ -9,7 +9,7 @@ export const comment = async (req,res) => {
     const comment_image = value.selectedFile;
     try {
         if(id && value && userId && projectId){
-            const newComment = await pool.query("INSERT INTO comments_tbl (comment_date, comment_text, comment_image, comment_user, task, project) VALUES(NOW(), $1, $2, $3, $4, $5) RETURNING *", [comment_text, comment_image, userId, id, projectId]);
+            const newComment = await pool.query("INSERT INTO comments_tbl (comment_date, comment_text, comment_image, comment_user, task, project) VALUES(NOW(), $1, decode($2, 'base64'), $3, $4, $5) RETURNING *", [comment_text, comment_image, userId, id, projectId]);
             res.json(newComment.rows[0]);
         }
     } catch (error) {

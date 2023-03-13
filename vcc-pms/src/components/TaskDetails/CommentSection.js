@@ -51,7 +51,7 @@ const CommentSection = ({ task }) => {
                     <strong>{commentUser[comment.comment_user]}: </strong>
                     {comment.comment_text}
                         <div> 
-                            <img height="300" width="450" src={`${dataImagePrefix}${comment.comment_image.toString('base64')}`} alt=" " /> 
+                            <img height="300" width="450" src={comment.comment_image} alt=" " /> 
                         </div>
                     </Typography>
                     ))}
