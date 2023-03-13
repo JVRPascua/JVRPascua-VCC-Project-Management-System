@@ -17,7 +17,7 @@ const Paginate = () => {
     const page = query.get('page') || 1;
     const { numberOfPages } = useSelector((state) => state.projects)
     const user = JSON.parse(localStorage.getItem('profile'));
-    const userId = user?.result?.rows[0]?.users_id;
+    const userId = process.env.USER_ID || user?.result?.rows[0]?.users_id;
     const classes = useStyles();
     const dispatch = useDispatch();
     const isPage = page > 0;
