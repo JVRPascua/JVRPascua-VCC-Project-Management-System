@@ -21,21 +21,21 @@ const ProjectDetails = () => {
     const handleClose = () => setOpen(false);
     const projectName = project.project[0]?.project_name
     const projectManager = project.project[0]?.project_manager
-    
+
+    const getProjectQuery = useQuery({
+        queryKey: ["projects", id],
+        queryFn: () => dispatch(getProject(id)),
+    });
+
+    const getProjectTasksQuery = useQuery({
+        queryKey: ["projecttasks", id, currentId],
+        queryFn: () => dispatch(getProjectTasks(id, currentId)),
+    });
+
     useEffect(() => {
-        dispatch(getProject(id));
-    }, [dispatch, id]);
-    useEffect(() => {
-        dispatch(getProjectTasks(id, currentId));
-    }, [dispatch, id, currentId]);
-//    const getProjectQuery = useQuery({
-//        queryKey: ["projects", id],
-//        queryFn: dispatch(getProject(id)),
-//    });
-//    const getProjectTasksQuery = useQuery({
-//        queryKey: ["projecttasks", id, currentId],
-//        queryFn: dispatch(getProjectTasks(id, currentId)),
-//    });
+        getProjectQuery.refetch();
+        getProjectTasksQuery.refetch();
+    }, [id, currentId, getProjectQuery, getProjectTasksQuery]);
 
     if(!project) return null;
 

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { Pagination, PaginationItem } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
@@ -17,28 +17,16 @@ const Paginate = () => {
     const page = query.get('page') || 1;
     const { numberOfPages } = useSelector((state) => state.projects)
     const user = JSON.parse(localStorage.getItem('profile'));
-    const userId = process.env.USER_ID || user?.result?.rows[0]?.users_id;
+    const userId = process.env.USER_ID || (user?.result?.rows[0]?.users_id ?? null);
     const classes = useStyles();
     const dispatch = useDispatch();
     const isPage = page > 0;
-    
-//    useEffect(() => {
-        // Check if user ID is valid before dispatching the action
-//        if (user && user.result && user.result.rows && user.result.rows[0] && user.result.rows[0].users_id) {
-//            dispatch(getProjects(page, userId));
-//        }
-//     }, [dispatch, page]);
 
-//    const getProjectsQuery = useQuery({
-//        queryKey: ["projects", {page, userId}],
-//        enabled: isPage,
-//        queryFn: dispatch(getProjects({page, userId})),
-//    });
-const getProjectsQuery = useQuery(["projects", page, userId], () => {
-    if (isPage && userId) {
-      dispatch(getProjects(page, userId));
-    }
-  });
+    const getProjectsQuery = useQuery(["projects", page, userId], () => {
+        if (isPage && userId) {
+            dispatch(getProjects(page, userId));
+        }
+    });
 
     return (
         <Pagination 
