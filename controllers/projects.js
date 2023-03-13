@@ -10,6 +10,16 @@ export const getProject = async (req, res) => {
     }
 };
 
+export const getProjectsBySearch = async (req, res) => {
+    const { searchQuery } = req.query;
+    try {
+        const projects = await pool.query("SELECT projects_id, project_name, budget, start_date, end_date, description, project_manager FROM projects_tbl WHERE project_name ILIKE $1", [`%${searchQuery}%`]);
+        res.status(200).json(projects.rows);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
 export const getProjects = async (req, res) => {
     try{
         const { page, userId } = req.query;
@@ -31,20 +41,10 @@ export const getProjects = async (req, res) => {
     }
 };
 
-export const getProjectsBySearch = async (req, res) => {
-    const { searchQuery } = req.query;
-    try {
-        const projects = await pool.query("SELECT projects_id, project_name, budget, start_date, end_date, description, project_manager FROM projects_tbl WHERE project_name ILIKE $1", [`%${searchQuery}%`]);
-        res.status(200).json(projects.rows);
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
-};
-
 export const createProjects = async (req, res) => {
     try {
         const { project_name, budget, start_date, end_date, description, project_manager } = req.body;
-        const newProject = await pool.query("INSERT INTO projects_tbl (project_name, budget, start_date, end_date, description, project_manager) VALUES($project_name, $budget, $start_date, $end_date, $description, $project_manager) RETURNING *", [project_name, budget, start_date, end_date, description, project_manager]);
+        const newProject = await pool.query("INSERT INTO projects_tbl (project_name, budget, start_date, end_date, description, project_manager) VALUES($1, $2, $3, $4, $5, $6) RETURNING *", [project_name, budget, start_date, end_date, description, project_manager]);
          res.json(newProject.rows[0]);
     } catch (error) {
         res.status(409).json({ message: error });
