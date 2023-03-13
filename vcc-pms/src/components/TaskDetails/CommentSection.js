@@ -52,7 +52,7 @@ const CommentSection = ({ task }) => {
                     {comment.comment_text}
                     {comment.comment_image &&
                         <div> 
-                            <img height="300" width="450" src={`data:image/png;base64,${comment.comment_image.toString('base64')}`} alt=" " />
+                            <img height="300" width="450" src={`data:image/jpeg;base64,${Buffer.from(comment.comment_image, 'hex').toString('base64')}`} alt=" " />
                         </div>
                     }
                     </Typography>
