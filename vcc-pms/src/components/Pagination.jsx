@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Pagination, PaginationItem } from "@mui/material";
-import { Link } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { getProjects } from "../actions/projects";
@@ -11,6 +10,13 @@ import useStyles from "./styles";
 function Query() {
  return new URLSearchParams(useLocation().search);
 }
+
+const updateQueryString = (key, value) => {
+  const searchParams = new URLSearchParams(window.location.search);
+  searchParams.set(key, value);
+  const newUrl = window.location.pathname + "?" + searchParams.toString();
+  window.history.pushState({ path: newUrl }, "", newUrl);
+};
 
 const Paginate = () => {
     const query = Query();
@@ -23,11 +29,14 @@ const Paginate = () => {
     const dispatch = useDispatch();
     const isPage = page > 0;
 
-    window.addEventListener('beforeunload', () => {
-        const user = JSON.parse(localStorage.getItem('profile'));
-        const userId = user?.result?.rows[0]?.users_id ?? null;
-        localStorage.setItem('userId', userId);
-    });
+    const memoizedUpdateQueryString = useCallback(updateQueryString, []);
+
+    React.useEffect(() => {
+      if (isPage && userId) {
+          dispatch(getProjects(page, userId));
+          memoizedUpdateQueryString('userId', userId);
+      }
+    }, [page, userId, dispatch, isPage, memoizedUpdateQueryString]);
 
     const getProjectsQuery = useQuery(["projects", page, userId], () => {
         if (isPage && userId) {
@@ -43,7 +52,7 @@ const Paginate = () => {
             variant="outline"
             color="primary"
             renderItem={(item) => (
-                <PaginationItem {...item} component={Link} to={`/projects?page=${item.page}`} />
+                <PaginationItem {...item} component={Link} to={`/projects?page=${item.page}&userId=${userId}`} />
             )}
         />
     )
