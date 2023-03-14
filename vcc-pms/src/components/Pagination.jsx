@@ -15,6 +15,9 @@ function Query() {
 const updateQueryString = (key, value) => {
   const searchParams = new URLSearchParams(window.location.search);
   searchParams.set(key, value);
+  if (!searchParams.has("page")) {
+    searchParams.set("page", 1);
+  }
   const newUrl = window.location.pathname + "?" + searchParams.toString();
   window.history.pushState({ path: newUrl }, "", newUrl);
 };
