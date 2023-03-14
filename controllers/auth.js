@@ -24,7 +24,7 @@ export const signin = async (req, res) => {
     });
     return;
     } else if (result === true) {
-        const token = jwt.sign({username: user[0].username, id: user[0].users_id },'test', {expiresIn: "1h"} );
+        const token = jwt.sign({username: user[0].username, id: user[0].users_id },process.env.JWT_SECRET, {expiresIn: "1h"} );
         res.status(200).json({
             message: "User signed in!",
             result: existingUser,
