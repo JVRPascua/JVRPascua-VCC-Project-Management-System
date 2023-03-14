@@ -38,11 +38,19 @@ const Paginate = () => {
       }
     }, [page, userId, dispatch, isPage, memoizedUpdateQueryString]);
 
-    const getProjectsQuery = useQuery(["projects", page, userId], () => {
-        if (isPage && userId) {
-            dispatch(getProjects(page, userId));
+    const getProjectsQuery = useQuery(
+        ["projects", page, userId],
+        () => {
+          if (isPage && userId) {
+            return dispatch(getProjects(page, userId));
+          }
+        },
+        {
+          onError: (error) => {
+            console.log(error);
+          },
         }
-    });
+      );
 
     return (
         <Pagination 
