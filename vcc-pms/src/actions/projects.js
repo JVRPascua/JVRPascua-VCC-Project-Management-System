@@ -13,13 +13,16 @@ export const getProject = (id) => async (dispatch) => {
 
 }
 
-export const getProjects = (page, userId) => async () => {
+export const getProjects = (page, userId) => async (dispatch) => {
     try {
+        dispatch({ type: START_LOADING });
         const { data } = await api.fetchProjects(page, userId);
-        return data;
+        dispatch({ type: FETCH_ALL, payload: data });
+        dispatch({ type: END_LOADING });
     } catch (error) {
         console.log(error);
     }
+
 }
 
 export const getProjectsBySearch = (searchQuery) => async (dispatch) => {
