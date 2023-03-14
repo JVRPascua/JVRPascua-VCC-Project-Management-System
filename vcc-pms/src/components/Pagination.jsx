@@ -23,6 +23,12 @@ const Paginate = () => {
     const dispatch = useDispatch();
     const isPage = page > 0;
 
+    window.addEventListener('beforeunload', () => {
+        const user = JSON.parse(localStorage.getItem('profile'));
+        const userId = user?.result?.rows[0]?.users_id ?? null;
+        localStorage.setItem('userId', userId);
+    });
+
     const getProjectsQuery = useQuery(["projects", page, userId], () => {
         if (isPage && userId) {
             dispatch(getProjects(page, userId));
