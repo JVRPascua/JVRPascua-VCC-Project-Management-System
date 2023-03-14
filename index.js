@@ -36,7 +36,7 @@ app.use('/auth', authRoutes);
 app.use('/tasks', tasksRoutes);
 app.use('/comments', commentsRoutes);
 
-app.get('/*', function (req, res) {
+app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'vcc-pms/build', 'index.html'));
 });
 
