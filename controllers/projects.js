@@ -25,7 +25,7 @@ export const getProjects = async (req, res) => {
       const { page, userId } = req.query;
       const pg = parseInt(page);
       const id = userId ? parseInt(userId) : null;
-      if (Number.isNaN(id)) {
+      if (id && Number.isNaN(id)) {
         return res.status(400).json({ error: 'Invalid user ID' });
       }
       let limit = 6;
@@ -38,8 +38,7 @@ export const getProjects = async (req, res) => {
       if (id === 1) {
         const result = await pool.query("SELECT * FROM projects_tbl ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)", [pg, limit]);
         res.status(200).json({ data: result.rows, currentPage: pg, numberOfPages: Math.ceil(totalProjectId / limit) });
-      }
-      else {
+      } else {
         const result = await pool.query("SELECT * FROM projects_tbl WHERE project_manager = $3 ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)", [pg, limit, id]);
         const totalProjects = result.rowCount;
         res.status(200).json({ data: result.rows, currentPage: pg, numberOfPages: Math.ceil(totalProjects / limit) });
