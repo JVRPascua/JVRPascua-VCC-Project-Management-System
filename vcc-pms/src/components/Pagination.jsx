@@ -33,11 +33,11 @@ const Paginate = () => {
     const memoizedUpdateQueryString = useCallback(updateQueryString, []);
 
     React.useEffect(() => {
-      if (isPage && userId) {
+        if (userId) {
           dispatch(getProjects(page, userId));
           memoizedUpdateQueryString('userId', userId);
-      }
-    }, [page, userId, dispatch, isPage, memoizedUpdateQueryString]);
+        }
+      }, [page, userId, dispatch, memoizedUpdateQueryString]);
 
     const getProjectsQuery = useQuery(
         ["projects", page, userId],
