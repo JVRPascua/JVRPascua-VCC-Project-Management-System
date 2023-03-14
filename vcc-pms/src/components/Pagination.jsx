@@ -65,7 +65,7 @@ const Paginate = () => {
             variant="outline"
             color="primary"
             renderItem={(item) => (
-                <PaginationItem {...item} component="a" to={`/projects?page=${item.page}&userId=${userId}`} />
+                <PaginationItem {...item} component="a" href={`?page=${item.page}&userId=${userId}`} onClick={(e) => { e.preventDefault(); memoizedUpdateQueryString('page', item.page) }} />
             )}
         />
     )
