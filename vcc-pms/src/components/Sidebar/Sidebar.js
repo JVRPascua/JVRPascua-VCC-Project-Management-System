@@ -41,6 +41,7 @@ import vcclogo from '../../images/vcclogo.png';
     }
     setUser(JSON.parse(localStorage.getItem('profile')));
   }, [location]);
+
   let currentUser = {
     1: "General Manager",
     2: "Project Manager 1",
@@ -48,7 +49,7 @@ import vcclogo from '../../images/vcclogo.png';
     4: "Project Manager 3",
     5: "Project Manager 4",
     6: "Project Manager 5",
-}
+  }
   let userId = user?.result?.rows[0]?.users_id;
   const drawer = (
     <div>

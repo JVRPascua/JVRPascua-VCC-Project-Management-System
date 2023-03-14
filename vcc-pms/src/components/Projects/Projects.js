@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useStyles from "./styles.js";
 import { Container, AppBar, Grow, Grid, Paper, TextField, Button, Modal, Box } from "@mui/material";
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -31,6 +31,13 @@ const Projects = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    useEffect(() => {
+      if (userId) {
+        localStorage.setItem("userId", userId);
+      }
+    }, [userId]);
+
+    
     const handleKeyPress = (e) => {
       if(e.keyCode === 13) {
         searchProject();

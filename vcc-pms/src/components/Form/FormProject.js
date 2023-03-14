@@ -33,7 +33,7 @@ const FormProject = ({ currentId }) => {
 
     const clear = () => {
       setProjectData({ project_name: '', budget: '', start_date: '', end_date: '', 
-      description: '', project_manager: ''})
+      description: '', project_manager: '' })
     } 
 
     const projectManager = [
