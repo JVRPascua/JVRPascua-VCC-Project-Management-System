@@ -22,30 +22,33 @@ export const getProjectsBySearch = async (req, res) => {
 
 export const getProjects = async (req, res) => {
     try {
-        const { page, userId } = req.query;
-        const pg = parseInt(page);
-        const id = Number.isInteger(parseInt(userId)) ? parseInt(userId) : null;
-        if (id === null || isNaN(id) || id <= 0) {
-            return res.status(400).json({ error: 'Invalid user ID' });
-        }
-        let limit = 6;
-        limit = parseInt(limit);
-        const total = await pool.query("SELECT COUNT(projects_id) AS exact_count FROM projects_tbl");
-        const totalProjectId = parseInt(total.rows[0].exact_count);
-        if (id === 1) {
-            const result = await pool.query("SELECT * FROM projects_tbl ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)", [pg, limit]);
-            res.status(200).json({ data: result.rows, currentPage: pg, numberOfPages: Math.ceil(totalProjectId / limit) });
-        }
-        else {
-            const result = await pool.query("SELECT * FROM projects_tbl WHERE project_manager = $3 ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)", [pg, limit, id]);
-            const totalProjects = result.rowCount;
-            res.status(200).json({ data: result.rows, currentPage: pg, numberOfPages: Math.ceil(totalProjects / limit) });
-        }
+      const { page, userId } = req.query;
+      const pg = parseInt(page);
+      const id = userId ? parseInt(userId) : null;
+      if (Number.isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid user ID' });
+      }
+      let limit = 6;
+      limit = parseInt(limit);
+      const total = await pool.query("SELECT COUNT(projects_id) AS exact_count FROM projects_tbl");
+      const totalProjectId = parseInt(total.rows[0].exact_count);
+      if (id === null || id <= 0) {
+        return res.status(400).json({ error: 'Invalid user ID' });
+      }
+      if (id === 1) {
+        const result = await pool.query("SELECT * FROM projects_tbl ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)", [pg, limit]);
+        res.status(200).json({ data: result.rows, currentPage: pg, numberOfPages: Math.ceil(totalProjectId / limit) });
+      }
+      else {
+        const result = await pool.query("SELECT * FROM projects_tbl WHERE project_manager = $3 ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)", [pg, limit, id]);
+        const totalProjects = result.rowCount;
+        res.status(200).json({ data: result.rows, currentPage: pg, numberOfPages: Math.ceil(totalProjects / limit) });
+      }
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'An error occurred while processing your request' });
+      console.log(error);
+      res.status(500).json({ error: 'An error occurred while processing your request' });
     }
-};
+  };
 
 
 export const createProjects = async (req, res) => {
