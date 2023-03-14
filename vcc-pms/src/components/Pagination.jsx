@@ -16,10 +16,14 @@ const Paginate = () => {
     const page = query.get('page') || 1;
     const { numberOfPages } = useSelector((state) => state.projects)
     const user = JSON.parse(localStorage.getItem('profile'));
-    const userId = process.env.USER_ID || user?.result?.rows[0]?.users_id;
+    let userId = process.env.USER_ID || user?.result?.rows[0]?.users_id;
     const classes = useStyles();
     const dispatch = useDispatch();
     const isPage = page > 0;
+
+    if (!userId) {
+        userId = query.get('userId');
+      }
 
     const updateQueryString = useCallback((key, value) => {
       const searchParams = new URLSearchParams(window.location.search);
@@ -36,7 +40,6 @@ const Paginate = () => {
     }, [page, userId, dispatch, isPage, updateQueryString]);
 
     const getProjectsQuery = useQuery(["projects", page, userId], () => {
-        console.log(userId);
         if (isPage && userId) {
             dispatch(getProjects(page, userId));
         }

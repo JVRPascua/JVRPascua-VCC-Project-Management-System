@@ -15,15 +15,20 @@ export const getProject = (id) => async (dispatch) => {
 
 export const getProjects = (page, userId) => async (dispatch) => {
     try {
-        dispatch({ type: START_LOADING });
-        const { data } = await api.fetchProjects(page, userId);
-        dispatch({ type: FETCH_ALL, payload: data });
-        dispatch({ type: END_LOADING });
+      dispatch({ type: START_LOADING });
+      let url = `/projects?page=${page}`;
+  
+      if (userId) {
+        url += `&userId=${userId}`;
+      }
+  
+      const { data } = await api.fetchProjects(url);
+      dispatch({ type: FETCH_ALL, payload: data });
+      dispatch({ type: END_LOADING });
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-
-}
+  }
 
 export const getProjectsBySearch = (searchQuery) => async (dispatch) => {
     try {
