@@ -39,7 +39,7 @@ export const getProjects = async (req, res) => {
         const result = await pool.query("SELECT * FROM projects_tbl ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)", [pg, limit]);
         res.status(200).json({ data: result.rows, currentPage: pg, numberOfPages: Math.ceil(totalProjectId / limit) });
       } else {
-        const result = await pool.query("SELECT * FROM projects_tbl WHERE project_manager = $3 ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)", [pg, limit, id]);
+        const result = await pool.query("SELECT * FROM projects_tbl WHERE project_manager = $3::int ORDER BY projects_id DESC LIMIT $2 OFFSET (($1 - 1) * $2)", [pg, limit, id]);
         const totalProjects = result.rowCount;
         res.status(200).json({ data: result.rows, currentPage: pg, numberOfPages: Math.ceil(totalProjects / limit) });
       }
