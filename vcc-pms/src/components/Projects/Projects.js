@@ -45,6 +45,10 @@ const Projects = () => {
       }
     }
 
+    if (!userId) {
+      return <div>Loading...</div>;
+    }
+
     return ( 
       <Container maxwidth="lg">
         <Paper className={classes.heading} elevation={6}>
