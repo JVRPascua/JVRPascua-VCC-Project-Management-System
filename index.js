@@ -37,7 +37,9 @@ app.use('/tasks', tasksRoutes);
 app.use('/comments', commentsRoutes);
 
 app.get('*', function (req, res) {
+  if (!req.url.startsWith('/api/')) {
     res.sendFile(path.join(__dirname, 'vcc-pms/build', 'index.html'));
+  }
 });
 
 app.listen(PORT, () => {
