@@ -36,6 +36,7 @@ const Paginate = () => {
     }, [page, userId, dispatch, isPage, updateQueryString]);
 
     const getProjectsQuery = useQuery(["projects", page, userId], () => {
+        console.log('USER_ID:', process.env.USER_ID);
         if (isPage && userId) {
             dispatch(getProjects(page, userId));
         }
