@@ -30,13 +30,6 @@ const Projects = () => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
-    useEffect(() => {
-      if (userId) {
-        localStorage.setItem("userId", userId);
-      }
-    }, [userId]);
-
     
     const handleKeyPress = (e) => {
       if(e.keyCode === 13) {
