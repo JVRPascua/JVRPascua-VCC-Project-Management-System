@@ -28,7 +28,8 @@ export const getProjects = async (req, res) => {
         if (id === null || isNaN(id) || id <= 0) {
             return res.status(400).json({ error: 'Invalid user ID' });
         }
-        const limit = 6;
+        let limit = 6;
+        limit = parseInt(limit);
         const total = await pool.query("SELECT COUNT(projects_id) AS exact_count FROM projects_tbl");
         const totalProjectId = parseInt(total.rows[0].exact_count);
         if (id === 1) {
