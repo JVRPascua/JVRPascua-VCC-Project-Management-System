@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { getProjects } from "../actions/projects";
+import { FETCH_ALL, END_LOADING } from "../constants/actionTypes";
 
 import useStyles from "./styles";
 
@@ -41,16 +42,20 @@ const Paginate = () => {
     const getProjectsQuery = useQuery(
         ["projects", page, userId],
         () => {
-          if (isPage && userId) {
-            return dispatch(getProjects(page, userId));
-          }
+            if (isPage && userId) {
+                return dispatch(getProjects(page, userId));
+            }
         },
         {
-          onError: (error) => {
-            console.log(error);
-          },
+            onSuccess: (data) => {
+                dispatch({ type: FETCH_ALL, payload: data });
+                dispatch({ type: END_LOADING });
+            },
+            onError: (error) => {
+                console.log(error);
+            },
         }
-      );
+    );
 
     return (
         <Pagination 
