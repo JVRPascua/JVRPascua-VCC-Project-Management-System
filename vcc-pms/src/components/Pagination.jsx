@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Pagination, PaginationItem } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { getProjects } from "../actions/projects";
@@ -65,7 +65,7 @@ const Paginate = () => {
             variant="outline"
             color="primary"
             renderItem={(item) => (
-                <PaginationItem {...item} component={Link} to={`/projects?page=${item.page}&userId=${userId}`} />
+                <PaginationItem {...item} component="a" to={`/projects?page=${item.page}&userId=${userId}`} />
             )}
         />
     )
