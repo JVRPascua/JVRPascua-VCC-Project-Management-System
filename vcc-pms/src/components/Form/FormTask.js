@@ -20,10 +20,8 @@ const FormTask = ({ id, currentId, projectManager }) => {
       
       if(currentId){
         dispatch(updateTask(currentId, taskData))
-        window.location.reload();
       } else {
         dispatch(createTask(taskData))
-        window.location.reload();
       }
       clear();
     }
