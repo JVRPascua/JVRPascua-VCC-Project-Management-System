@@ -19,14 +19,11 @@ const FormProject = ({ currentId }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
         if(currentId) {
           dispatch(updateProject(currentId, projectData));
-          window.location.reload();
         }
         else {
           dispatch(createProject(projectData));
-          window.location.reload();
         }
         clear();
     }

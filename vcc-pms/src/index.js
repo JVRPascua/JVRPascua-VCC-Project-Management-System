@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -14,16 +14,15 @@ const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
 const queryClient = new QueryClient();
 
+const MemoizedApp = memo(App);
+
 const root = ReactDOMClient.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <App />
+          <MemoizedApp />
         </BrowserRouter>
       </QueryClientProvider>
     </Provider>
-
-  
 );
-
