@@ -12,24 +12,28 @@ const FormProject = ({ currentId }) => {
     const project = useSelector((state) => currentId ? state.projects.projects.find((p) => p.projects_id === currentId) : null);
     const user = JSON.parse(localStorage.getItem('profile'));
     const userId = user?.result?.rows[0]?.users_id;
+    const [isSuccess, setIsSuccess] = useState(false);
 
     useEffect(() => {
       if(project) setProjectData(project);
     }, [project]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
 
-        if(currentId) {
-          dispatch(updateProject(currentId, projectData));
-          window.location.reload();
-        }
-        else {
-          dispatch(createProject(projectData));
-          window.location.reload();
-        }
-        clear();
-    }
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if (currentId) {
+        dispatch(updateProject(currentId, projectData)).then(() => setIsSuccess(true));
+      } else {
+        dispatch(createProject(projectData)).then(() => setIsSuccess(true));
+      }
+      clear();
+    };
+    
+    useEffect(() => {
+      if (isSuccess) {
+        window.location.reload();
+      }
+    }, [isSuccess]);
 
     const clear = () => {
       setProjectData({ project_name: '', budget: '', start_date: '', end_date: '', 
