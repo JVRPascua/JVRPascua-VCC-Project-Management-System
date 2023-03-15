@@ -13,7 +13,7 @@ const Dashboard = () => {
   const userId = user?.result?.rows[0]?.users_id;
   const tasks = useSelector((state) => state?.tasks);
 
-  const getTasksQuery = useQuery({
+  useQuery({
     queryKey: ["tasks", userId],
     queryFn: () => dispatch(getTasks(userId)),
 });

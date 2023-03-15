@@ -4,7 +4,7 @@ import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get('/', getProjects);
+router.get('/', auth, getProjects);
 router.get('/search', auth, getProjectsBySearch);
 router.get('/:id', auth, getProject);
 router.post('/', auth, createProjects);

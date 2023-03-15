@@ -10,9 +10,6 @@ const FormTask = ({ id, currentId, projectManager }) => {
     const task = useSelector((state) => currentId ? state.tasks.find((t) => t.tasks_id === currentId) : null);
     const classes = useStyles();
     const dispatch = useDispatch();
-    const user = JSON.parse(localStorage.getItem('profile'));
-    const userId = user?.result?.rows[0]?.users_id;
-    
 
     useEffect(() => {
       if(task) setTaskData(task);

@@ -1,6 +1,6 @@
-import { FETCH_ALL, FETCH_PROJECT, CREATE, UPDATE, DELETE, FETCH_BY_SEARCH, START_LOADING, END_LOADING } from '../constants/actionTypes';
+import { FETCH_ALL, CREATE, UPDATE, DELETE, FETCH_BY_SEARCH, START_LOADING, END_LOADING } from '../constants/actionTypes';
 
-export default (state  = { isLoading: true, projects: []}, action) => {
+const projectReducer = (state  = { isLoading: true, projects: []}, action) => {
     switch (action.type) {
         case START_LOADING:
             return { ...state, isLoading: true}
@@ -25,3 +25,5 @@ export default (state  = { isLoading: true, projects: []}, action) => {
             return state;
     }
 }
+
+export default projectReducer;

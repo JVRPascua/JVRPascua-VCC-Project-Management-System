@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import decode from 'jwt-decode';
 import Box from '@mui/material/Box';
@@ -15,7 +15,6 @@ import Toolbar from '@mui/material/Toolbar';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import TaskIcon from '@mui/icons-material/Task';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import vcclogo from '../../images/vcclogo.png';
@@ -24,23 +23,29 @@ import vcclogo from '../../images/vcclogo.png';
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigate = useNavigate();
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem('profile');
-    dispatch({ type: 'LOGOUT '});
-    navigate('loginpage')
+    dispatch({ type: 'LOGOUT' });
+    navigate('loginpage');
     setUser(null);
-  }
+  }, [dispatch, navigate, setUser]);
+  
+  const checkTokenExpiration = useCallback((token) => {
+    const decodedToken = decode(token);
+    if (decodedToken.exp * 1000 < new Date().getTime()) {
+      logout();
+    }
+  }, [logout]);
+  
   useEffect(() => {
     const token = user?.token;
     if (token) {
-      const decodedToken = decode(token);
-      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+      checkTokenExpiration(token);
     }
     setUser(JSON.parse(localStorage.getItem('profile')));
-  }, [location]);
+  }, [checkTokenExpiration, setUser, user?.token]);
 
   let currentUser = {
     1: "General Manager",

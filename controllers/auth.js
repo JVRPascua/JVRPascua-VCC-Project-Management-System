@@ -10,44 +10,44 @@ export const signin = async (req, res) => {
     try {
         const existingUser = await pool.query(`SELECT * FROM users WHERE username= $1;`, [username])
         const user = existingUser.rows;
-    if (user.length === 0) {
-        res.status(400).json({
-        error: "User not found!",
-    });
-    return;
-    }
-    else {
-        bcrypt.compare(password, user[0].password, (err, result) => {
-    if (err) {
-        res.status(500).json({
-        error: "Server error",
-    });
-    return;
-    } else if (result === true) {
-        const token = jwt.sign({username: user[0].username, id: user[0].users_id },process.env.JWT_SECRET, {expiresIn: "1h"} );
-        res.status(200).json({
-            message: "User signed in!",
-            result: existingUser,
-            token: token,
-        });
-
-    }
-    else {
-        if (result != true)
+        if (user.length === 0) {
             res.status(400).json({
-            error: "Wrong credentials!",
+            error: "User not found!",
         });
         return;
-    }
-    })
-    }
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({
-        error: "Something went wrong!",
-    });
-    };
-    return;
+        }
+        else {
+            bcrypt.compare(password, user[0].password, (err, result) => {
+                if (err) {
+                    res.status(500).json({
+                    error: "Server error",
+                });
+                return;
+                } else if (result === true) {
+                    const token = jwt.sign({username: user[0].username, id: user[0].users_id },process.env.JWT_SECRET, {expiresIn: "1h"} );
+                    res.status(200).json({
+                        message: "User signed in!",
+                        result: existingUser,
+                        token: token,
+                    });
+
+                }
+                else {
+                    if (result != true)
+                        res.status(400).json({
+                            error: "Wrong credentials!",
+                        });
+                        return;
+                    }
+                })
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({
+            error: "Something went wrong!",
+            });
+         };
+        return;
     };
 
 /* export const signup  =  async (req, res) => {

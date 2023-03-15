@@ -22,7 +22,7 @@ const TaskDetails = () => {
 		navigate(-1);
 	}
 
-    const getTaskQuery = useQuery({
+    useQuery({
         queryKey: ["task", id],
         queryFn: () => dispatch(getTask(id)),
     });
@@ -33,13 +33,13 @@ const TaskDetails = () => {
     }
 
     useEffect(() => {
-        if (task[0]?.is_done === true) {
-            setIsButtonDisabled(true);
+        const isTaskDone = task[0]?.is_done;
+        if (isTaskDone === true) {
+          setIsButtonDisabled(true);
+        } else {
+          setIsButtonDisabled(false);
         }
-        else {
-            setIsButtonDisabled(false);
-        }
-     }, [task[0]?.is_done]);
+      }, [task]);
 
     let tPriority = task[0]?.priority;
     let priorityLabel;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import useStyles from "./styles.js";
 import { Container, AppBar, Grow, Grid, Paper, TextField, Button, Modal, Box } from "@mui/material";
 import { useNavigate, useLocation } from 'react-router-dom';

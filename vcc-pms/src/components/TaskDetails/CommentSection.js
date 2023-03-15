@@ -15,12 +15,10 @@ const CommentSection = ({ task }) => {
     const user = JSON.parse(localStorage.getItem('profile'));
     const userId = user?.result?.rows[0]?.users_id;
     const taskComments = useSelector((state) => state?.comments);
-    const [comments, setComments] = useState((state) => state?.comments);
     const id = task[0]?.tasks_id;
     const commentsRef = useRef();
-    const dataImagePrefix = `data:image/png;base64,`
 
-    const getTaskCommentsQuery = useQuery({
+    useQuery({
         queryKey: ["taskcomments", id],
         queryFn: () => dispatch(getTaskComments(id)),
     });

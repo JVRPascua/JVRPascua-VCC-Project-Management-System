@@ -13,7 +13,7 @@ export const getTasks = async (req, res) => {
         }
     } catch (error) {
     res.status(404).json({ error });
-}
+    }
 };
 
 export const getProjectTasks = async (req, res) => {

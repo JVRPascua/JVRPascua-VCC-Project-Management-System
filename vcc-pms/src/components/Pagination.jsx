@@ -39,7 +39,7 @@ const Paginate = () => {
       }
     }, [page, userId, dispatch, isPage, updateQueryString]);
 
-    const getProjectsQuery = useQuery(["projects", page, userId], () => {
+    useQuery(["projects", page, userId], () => {
         if (isPage && userId) {
             dispatch(getProjects(page, userId));
         }

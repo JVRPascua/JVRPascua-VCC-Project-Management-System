@@ -1,8 +1,10 @@
-export default (state = {project: []}, action) => {
+const projectReducer = (state = {project: []}, action) => {
     switch (action.type) {
-        case 'FETCH_PROJECT':
-            return {...state, project: action.payload}
-        default:
-            return state;
-        }
+      case 'FETCH_PROJECT':
+        return {...state, project: action.payload};
+      default:
+        return state;
     }
+  };
+  
+  export default projectReducer;

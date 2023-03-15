@@ -12,7 +12,7 @@ const Tasks = () => {
     const user = JSON.parse(localStorage.getItem('profile'));
     const id = user?.result?.rows[0]?.users_id;
 
-    const getTasksQuery = useQuery({
+    useQuery({
         queryKey: ["tasks", id],
         queryFn: () => dispatch(getTasks(id)),
     });
