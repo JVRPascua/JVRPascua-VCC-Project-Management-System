@@ -13,6 +13,7 @@ npm install
 Client
 Navigate to the client folder (vcc-pms) and install the client dependencies.
 ```bash
+cd vcc-pms
 npm install -s serve
 ```
 ## Usage
