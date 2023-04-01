@@ -1,20 +1,25 @@
 import pool from '../db.js';
 
 export const getTasks = async (req, res) => {
-    try{
-        const { id } = req.params;
-        const userId = Number(id);
-        if(userId === 1){
-            const tasks = await pool.query("SELECT * FROM tasks_tbl ORDER BY priority, end_date");
-            res.status(200).json(tasks.rows);
-        } else {
-            const tasks = await pool.query("SELECT * FROM tasks_tbl WHERE project_manager = $1 ORDER BY priority, end_date", [userId]);
-            res.status(200).json(tasks.rows);
-        }
+    try {
+      const { id } = req.params;
+      const userId = Number(id);
+      if (userId === 1) {
+        const tasks = await pool.query(
+          "SELECT t.*, p.project_name FROM tasks_tbl t JOIN projects_tbl p ON t.project = p.projects_id ORDER BY t.priority, t.end_date"
+        );
+        res.status(200).json(tasks.rows);
+      } else {
+        const tasks = await pool.query(
+          "SELECT t.*, p.project_name FROM tasks_tbl t JOIN projects_tbl p ON t.project = p.projects_id WHERE t.project_manager = $1 ORDER BY t.priority, t.end_date",
+          [userId]
+        );
+        res.status(200).json(tasks.rows);
+      }
     } catch (error) {
-    res.status(404).json({ error });
+      res.status(404).json({ error });
     }
-};
+  };
 
 export const getProjectTasks = async (req, res) => {
     try{

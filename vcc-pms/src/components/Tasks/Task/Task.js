@@ -11,6 +11,7 @@ import FormTask from '../../Form/FormTask';
 import useStyles from './styles';
 
 const Task = ({id, task, setCurrentId, currentId }) => {
+    console.log(task);
     const classes = useStyles();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -70,10 +71,13 @@ const Task = ({id, task, setCurrentId, currentId }) => {
             <ButtonBase component="span" className={classes.cardActions} onClick={openTask}>
             <CardContent>
             <div className={classes.details}>
+            <Typography variant="body2"  color="textSecondary"><strong>Project: {task.project_name}</strong></Typography>
+            </div>
+            <div className={classes.details}>
             <Typography variant="body2"  color="textSecondary">Description: {task.description}</Typography>
             </div>
             <div className={classes.details}>
-            <Typography variant="body2"  color="textSecondary">Project Manager {task.project_manager - 1}</Typography>
+            <Typography variant="body2"  color="textSecondary"><strong>Project Manager {task.project_manager - 1}</strong></Typography>
             </div>
             <div className={classes.details}>
             <Typography variant="body2"  color="textSecondary"><div>{priorityIcon}<strong>{priorityLabel}</strong></div></Typography>
