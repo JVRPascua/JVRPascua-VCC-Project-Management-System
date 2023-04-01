@@ -73,6 +73,9 @@ const Task = ({id, task, setCurrentId, currentId }) => {
             <Typography variant="body2"  color="textSecondary">Description: {task.description}</Typography>
             </div>
             <div className={classes.details}>
+            <Typography variant="body2"  color="textSecondary">Project Manager {task.project_manager - 1}</Typography>
+            </div>
+            <div className={classes.details}>
             <Typography variant="body2"  color="textSecondary"><div>{priorityIcon}<strong>{priorityLabel}</strong></div></Typography>
             </div>
             </CardContent> 
