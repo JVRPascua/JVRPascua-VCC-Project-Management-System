@@ -3,12 +3,15 @@ import { Container, Grow, Grid, Paper } from "@mui/material";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from 'react-router-dom';
 import { getTasks } from "../../actions/tasks.js";
 import useStyles from "./styles.js";
 
 const Dashboard = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const openTaskPage = () => navigate('/tasks');
   const user = JSON.parse(localStorage.getItem('profile'));
   const userId = user?.result?.rows[0]?.users_id;
   const tasks = useSelector((state) => state?.tasks);
@@ -277,6 +280,7 @@ const Dashboard = () => {
                   <Paper className={classes.tableDescription} elevation={6}>Backlogs</Paper>
                   <ResponsiveContainer width="100%" height="85%">
                     <BarChart
+                    onClick={openTaskPage}
                     width={500}
                     height={300}
                     data={pm1backlogs}
@@ -303,6 +307,7 @@ const Dashboard = () => {
                   <Paper className={classes.tableDescription} elevation={6}>Active Tasks</Paper>
                   <ResponsiveContainer width="100%" height="85%">
                     <BarChart
+                    onClick={openTaskPage}
                     width={500}
                     height={300}
                     data={pm1active}
@@ -336,6 +341,7 @@ const Dashboard = () => {
                   <Paper className={classes.tableDescription} elevation={6}>Backlogs</Paper>
                   <ResponsiveContainer width="100%" height="85%">
                     <BarChart
+                    onClick={openTaskPage}
                     width={500}
                     height={300}
                     data={pm2backlogs}
@@ -362,6 +368,7 @@ const Dashboard = () => {
                   <Paper className={classes.tableDescription} elevation={6}>Active Tasks</Paper>
                   <ResponsiveContainer width="100%" height="85%">
                     <BarChart
+                    onClick={openTaskPage}
                     width={500}
                     height={300}
                     data={pm2active}
@@ -395,6 +402,7 @@ const Dashboard = () => {
                   <Paper className={classes.tableDescription} elevation={6}>Backlogs</Paper>
                   <ResponsiveContainer width="100%" height="85%">
                     <BarChart
+                    onClick={openTaskPage}
                     width={500}
                     height={300}
                     data={pm3backlogs}
@@ -421,6 +429,7 @@ const Dashboard = () => {
                   <Paper className={classes.tableDescription} elevation={6}>Active Tasks</Paper>
                   <ResponsiveContainer width="100%" height="85%">
                     <BarChart
+                    onClick={openTaskPage}
                     width={500}
                     height={300}
                     data={pm3active}
@@ -454,6 +463,7 @@ const Dashboard = () => {
                   <Paper className={classes.tableDescription} elevation={6}>Backlogs</Paper>
                   <ResponsiveContainer width="100%" height="85%">
                     <BarChart
+                    onClick={openTaskPage}
                     width={500}
                     height={300}
                     data={pm4backlogs}
@@ -480,6 +490,7 @@ const Dashboard = () => {
                   <Paper className={classes.tableDescription} elevation={6}>Active Tasks</Paper>
                   <ResponsiveContainer width="100%" height="85%">
                     <BarChart
+                    onClick={openTaskPage}
                     width={500}
                     height={300}
                     data={pm4active}
@@ -513,6 +524,7 @@ const Dashboard = () => {
                   <Paper className={classes.tableDescription} elevation={6}>Backlogs</Paper>
                   <ResponsiveContainer width="100%" height="85%">
                     <BarChart
+                    onClick={openTaskPage}
                     width={500}
                     height={300}
                     data={pm5backlogs}
@@ -539,6 +551,7 @@ const Dashboard = () => {
                   <Paper className={classes.tableDescription} elevation={6}>Active Tasks</Paper>
                   <ResponsiveContainer width="100%" height="85%">
                     <BarChart
+                    onClick={openTaskPage}
                     width={500}
                     height={300}
                     data={pm5active}

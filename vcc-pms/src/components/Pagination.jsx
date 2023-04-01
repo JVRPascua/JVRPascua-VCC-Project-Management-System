@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Pagination, PaginationItem } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +32,7 @@ const Paginate = () => {
       window.history.pushState({ path: newUrl }, "", newUrl);
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (isPage && userId) {
           dispatch(getProjects(page, userId));
           updateQueryString('userId', userId);
