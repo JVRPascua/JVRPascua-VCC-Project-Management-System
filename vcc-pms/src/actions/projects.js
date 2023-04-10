@@ -1,4 +1,4 @@
-import { FETCH_ALL, CREATE, DELETE, UPDATE, FETCH_BY_SEARCH, START_LOADING, END_LOADING, FETCH_PROJECT, FETCH_ALL_PROJECTS } from '../constants/actionTypes';
+import { FETCH_ALL, CREATE, DELETE, UPDATE, FETCH_BY_SEARCH, START_LOADING, END_LOADING, FETCH_PROJECT } from '../constants/actionTypes';
 import * as api from "../api";
 
 export const getProject = (id) => async (dispatch) => {
@@ -12,16 +12,6 @@ export const getProject = (id) => async (dispatch) => {
     }
 
 }
-
-export const getAllProjects = async (dispatch) => {
-    try {
-        const { data } = await api.fetchAllProjects();
-        dispatch({ type: FETCH_ALL_PROJECTS, payload: data });
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 
 export const getProjects = (page, userId) => async (dispatch) => {
     try {

@@ -20,16 +20,6 @@ export const getProjectsBySearch = async (req, res) => {
     }
 };
 
-export const getAllProjects = async (res) => {
-    try {
-          const result = await pool.query("SELECT * FROM projects_tbl");
-          res.status(200).json(result.rows);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'An error occurred while processing your request' });
-    }
-};
-
 export const getProjects = async (req, res) => {
     try {
       const { page, userId } = req.query;
