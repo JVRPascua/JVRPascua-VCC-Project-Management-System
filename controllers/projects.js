@@ -20,7 +20,7 @@ export const getProjectsBySearch = async (req, res) => {
     }
 };
 
-export const getAllProjects = async (res) => {
+export const getAllProjects = async (req, res) => {
     try {
           const result = await pool.query("SELECT * FROM projects_tbl");
           res.status(200).json(result.rows);

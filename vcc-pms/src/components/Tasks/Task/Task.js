@@ -11,7 +11,6 @@ import FormTask from '../../Form/FormTask';
 import useStyles from './styles';
 
 const Task = ({id, task, setCurrentId, currentId }) => {
-    console.log(task);
     const classes = useStyles();
     const dispatch = useDispatch();
     const navigate = useNavigate();
