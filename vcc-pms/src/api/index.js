@@ -10,6 +10,7 @@ API.interceptors.request.use((req) => {
     return req;
   });
 
+export const fetchAllProjects = () => API.get('/projects/allprojects');
 export const fetchProject = (id) => API.get(`/projects/${id}`);
 export const fetchProjects = (page, userId) => API.get(`/projects?page=${page}&userId=${userId}`);
 export const fetchProjectsBySearch = (searchQuery) => API.get(`/projects/search?searchQuery=${searchQuery.search || 'none'}`);

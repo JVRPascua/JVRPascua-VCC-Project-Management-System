@@ -1,11 +1,14 @@
 import React from "react";
 import { Container, Grow, Grid, Paper } from "@mui/material";
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from 'react-router-dom';
 import { getTasks } from "../../actions/tasks.js";
 import useStyles from "./styles.js";
+import { getAllProjects } from "../../actions/projects.js";
 
 const Dashboard = () => {
   const classes = useStyles();
@@ -15,11 +18,273 @@ const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem('profile'));
   const userId = user?.result?.rows[0]?.users_id;
   const tasks = useSelector((state) => state?.tasks);
+  const projects = useSelector((state) => state?.allProjects);
+
+  useQuery({
+    queryKey: ["allprojects"],
+    queryFn: () => dispatch(getAllProjects),
+  });
 
   useQuery({
     queryKey: ["tasks", userId],
     queryFn: () => dispatch(getTasks(userId)),
 });
+
+  const projectsWithManager = [];
+  for (let i = 2; i <= 6; i++) {
+    projectsWithManager.push(projects?.allProjects.filter(project => project.project_manager === i));
+  }
+  const projectsPM1 = projectsWithManager[0];
+  const projectsPM2 = projectsWithManager[1];
+  const projectsPM3 = projectsWithManager[2];
+  const projectsPM4 = projectsWithManager[3];
+  const projectsPM5 = projectsWithManager[4];
+
+  const tasksWithManager = [];
+  for (let i = 2; i <= 6; i++) {
+    tasksWithManager.push(tasks?.filter(task => task.project_manager === i));
+  }
+  const tasksPM1 = tasksWithManager[0];
+  const tasksPM2 = tasksWithManager[1];
+  const tasksPM3 = tasksWithManager[2];
+  const tasksPM4 = tasksWithManager[3];
+  const tasksPM5 = tasksWithManager[4];
+
+
+  const generatePDFPM1 = () => {
+    // Define the headers and data for the tables
+    const projectHeaders = [['Project', 'Start Date', 'Deadline', 'Budget']];
+    const taskHeaders = [['Task', 'Start Date', 'Deadline', 'Project']]
+    const projectDataPM1 = projectsPM1.map(project => {
+      return [project.project_name, project.start_date.slice(0, 10), project.end_date.slice(0, 10), `${project.budget}`];
+    });
+    const taskDataPM1 = tasksPM1.filter(task => !task.is_done) // Filter out completed tasks
+  .sort((a, b) => a.priority - b.priority || b.priority - a.priority) // Sort by priority
+  .map(task => [task.task_name, task.start_date.split('T')[0], task.end_date.split('T')[0], task.project_name]); // Map to new format
+
+  
+    // Create a new jsPDF instance
+    const doc = new jsPDF();
+  
+    // Add the first page to the PDF document
+    addPage1(doc, projectHeaders, taskHeaders, projectDataPM1, taskDataPM1);
+  
+    // Save and open the PDF file in a new tab
+    doc.save('ProjectManager1Reports.pdf');
+    window.open(doc.output('bloburl'), '_blank');
+  };
+  
+  // A helper function to add a page with 2 tables
+  const addPage1 = (doc, projectHeaders, taskHeaders, projectDataPM1, taskDataPM1) => {
+    // Add the title and subtitle to the PDF document
+    doc.setFontSize(18);
+    doc.text('Project Manager 1', 15, 15);
+    doc.setFontSize(12);
+    doc.text('Projects', 15, 25);
+  
+    // Add the first table to the PDF document
+    doc.autoTable({
+      head: projectHeaders,
+      body: projectDataPM1,
+      startY: 30,
+    });
+  
+    // Add the second table to the PDF document
+    doc.text('Tasks', 15, doc.autoTable.previous.finalY + 10);
+    doc.autoTable({
+      head: taskHeaders,
+      body: taskDataPM1,
+      startY: doc.autoTable.previous.finalY + 20,
+    });
+  };
+
+  const generatePDFPM2 = () => {
+    // Define the headers and data for the tables
+    const projectHeaders = [['Project', 'Start Date', 'Deadline', 'Budget']];
+    const taskHeaders = [['Task', 'Start Date', 'Deadline', 'Project']]
+    const projectDataPM2 = projectsPM2.map(project => {
+      return [project.project_name, project.start_date.slice(0, 10), project.end_date.slice(0, 10), `${project.budget}`];
+    });
+    const taskDataPM2 = tasksPM2.filter(task => !task.is_done) // Filter out completed tasks
+  .sort((a, b) => a.priority - b.priority || b.priority - a.priority) // Sort by priority
+  .map(task => [task.task_name, task.start_date.split('T')[0], task.end_date.split('T')[0], task.project_name]); // Map to new format
+
+  
+    // Create a new jsPDF instance
+    const doc = new jsPDF();
+  
+    // Add the first page to the PDF document
+    addPage2(doc, projectHeaders, taskHeaders, projectDataPM2, taskDataPM2);
+  
+    // Save and open the PDF file in a new tab
+    doc.save('ProjectManager2Reports.pdf');
+    window.open(doc.output('bloburl'), '_blank');
+  };
+  
+  // A helper function to add a page with 2 tables
+  const addPage2 = (doc, projectHeaders, taskHeaders, projectDataPM2, taskDataPM2) => {
+    // Add the title and subtitle to the PDF document
+    doc.setFontSize(18);
+    doc.text('Project Manager 2', 15, 15);
+    doc.setFontSize(12);
+    doc.text('Projects', 15, 25);
+  
+    // Add the first table to the PDF document
+    doc.autoTable({
+      head: projectHeaders,
+      body: projectDataPM2,
+      startY: 30,
+    });
+  
+    // Add the second table to the PDF document
+    doc.text('Tasks', 15, doc.autoTable.previous.finalY + 10);
+    doc.autoTable({
+      head: taskHeaders,
+      body: taskDataPM2,
+      startY: doc.autoTable.previous.finalY + 20,
+    });
+  };
+
+  const generatePDFPM3 = () => {
+    // Define the headers and data for the tables
+    const projectHeaders = [['Project', 'Start Date', 'Deadline', 'Budget']];
+    const taskHeaders = [['Task', 'Start Date', 'Deadline', 'Project']]
+    const projectDataPM3 = projectsPM3.map(project => {
+      return [project.project_name, project.start_date.slice(0, 10), project.end_date.slice(0, 10), `${project.budget}`];
+    });
+    const taskDataPM3 = tasksPM3.filter(task => !task.is_done) // Filter out completed tasks
+  .sort((a, b) => a.priority - b.priority || b.priority - a.priority) // Sort by priority
+  .map(task => [task.task_name, task.start_date.split('T')[0], task.end_date.split('T')[0], task.project_name]); // Map to new format
+
+  
+    // Create a new jsPDF instance
+    const doc = new jsPDF();
+  
+    // Add the first page to the PDF document
+    addPage3(doc, projectHeaders, taskHeaders, projectDataPM3, taskDataPM3);
+  
+    // Save and open the PDF file in a new tab
+    doc.save('ProjectManager3Reports.pdf');
+    window.open(doc.output('bloburl'), '_blank');
+  };
+  
+  // A helper function to add a page with 2 tables
+  const addPage3 = (doc, projectHeaders, taskHeaders, projectDataPM3, taskDataPM3) => {
+    // Add the title and subtitle to the PDF document
+    doc.setFontSize(18);
+    doc.text('Project Manager 3', 15, 15);
+    doc.setFontSize(12);
+    doc.text('Projects', 15, 25);
+  
+    // Add the first table to the PDF document
+    doc.autoTable({
+      head: projectHeaders,
+      body: projectDataPM3,
+      startY: 30,
+    });
+  
+    // Add the second table to the PDF document
+    doc.text('Tasks', 15, doc.autoTable.previous.finalY + 10);
+    doc.autoTable({
+      head: taskHeaders,
+      body: taskDataPM3,
+      startY: doc.autoTable.previous.finalY + 20,
+    });
+  };
+
+  const generatePDFPM4 = () => {
+    // Define the headers and data for the tables
+    const projectHeaders = [['Project', 'Start Date', 'Deadline', 'Budget']];
+    const taskHeaders = [['Task', 'Start Date', 'Deadline', 'Project']]
+    const projectDataPM4 = projectsPM4.map(project => {
+      return [project.project_name, project.start_date.slice(0, 10), project.end_date.slice(0, 10), `${project.budget}`];
+    });
+    const taskDataPM4 = tasksPM4.filter(task => !task.is_done) // Filter out completed tasks
+  .sort((a, b) => a.priority - b.priority || b.priority - a.priority) // Sort by priority
+  .map(task => [task.task_name, task.start_date.split('T')[0], task.end_date.split('T')[0], task.project_name]); // Map to new format
+
+  
+    // Create a new jsPDF instance
+    const doc = new jsPDF();
+  
+    // Add the first page to the PDF document
+    addPage4(doc, projectHeaders, taskHeaders, projectDataPM4, taskDataPM4);
+  
+    // Save and open the PDF file in a new tab
+    doc.save('ProjectManager3Reports.pdf');
+    window.open(doc.output('bloburl'), '_blank');
+  };
+  
+  // A helper function to add a page with 2 tables
+  const addPage4 = (doc, projectHeaders, taskHeaders, projectDataPM4, taskDataPM4) => {
+    // Add the title and subtitle to the PDF document
+    doc.setFontSize(18);
+    doc.text('Project Manager 4', 15, 15);
+    doc.setFontSize(12);
+    doc.text('Projects', 15, 25);
+  
+    // Add the first table to the PDF document
+    doc.autoTable({
+      head: projectHeaders,
+      body: projectDataPM4,
+      startY: 30,
+    });
+  
+    // Add the second table to the PDF document
+    doc.text('Tasks', 15, doc.autoTable.previous.finalY + 10);
+    doc.autoTable({
+      head: taskHeaders,
+      body: taskDataPM4,
+      startY: doc.autoTable.previous.finalY + 20,
+    });
+  };
+  const generatePDFPM5 = () => {
+    // Define the headers and data for the tables
+    const projectHeaders = [['Project', 'Start Date', 'Deadline', 'Budget']];
+    const taskHeaders = [['Task', 'Start Date', 'Deadline', 'Project']]
+    const projectDataPM5 = projectsPM5.map(project => {
+      return [project.project_name, project.start_date.slice(0, 10), project.end_date.slice(0, 10), `${project.budget}`];
+    });
+    const taskDataPM5 = tasksPM5.filter(task => !task.is_done) // Filter out completed tasks
+  .sort((a, b) => a.priority - b.priority || b.priority - a.priority) // Sort by priority
+  .map(task => [task.task_name, task.start_date.split('T')[0], task.end_date.split('T')[0], task.project_name]); // Map to new format
+
+  
+    // Create a new jsPDF instance
+    const doc = new jsPDF();
+  
+    // Add the first page to the PDF document
+    addPage5(doc, projectHeaders, taskHeaders, projectDataPM5, taskDataPM5);
+  
+    // Save and open the PDF file in a new tab
+    doc.save('ProjectManager5Reports.pdf');
+    window.open(doc.output('bloburl'), '_blank');
+  };
+  
+  // A helper function to add a page with 2 tables
+  const addPage5 = (doc, projectHeaders, taskHeaders, projectDataPM5, taskDataPM5) => {
+    // Add the title and subtitle to the PDF document
+    doc.setFontSize(18);
+    doc.text('Project Manager 5', 15, 15);
+    doc.setFontSize(12);
+    doc.text('Projects', 15, 25);
+  
+    // Add the first table to the PDF document
+    doc.autoTable({
+      head: projectHeaders,
+      body: projectDataPM5,
+      startY: 30,
+    });
+  
+    // Add the second table to the PDF document
+    doc.text('Tasks', 15, doc.autoTable.previous.finalY + 10);
+    doc.autoTable({
+      head: taskHeaders,
+      body: taskDataPM5,
+      startY: doc.autoTable.previous.finalY + 20,
+    });
+  };
+  
 
   const getPriorityActive = (manager, priority) => {
     return tasks.filter((task) => {
@@ -276,6 +541,9 @@ const Dashboard = () => {
                 <Grid item xs={12} sm={7}>
                   <Paper className={classes.projectManager} elevation={6}>Project Manager 1</Paper>
                 </Grid>
+                <div style={{ textAlign: 'left' }}>
+                <button type="button" onClick={generatePDFPM1} style={{ padding: "8px 16px", margin: "20px 10px 20px 75px", backgroundColor: "#cc0d00", color: "#fff", cursor: "pointer" }}>Generate Reports</button>
+                </div>
                 <Grid item xs={12} sm={7}>
                   <Paper className={classes.tableDescription} elevation={6}>Backlogs</Paper>
                   <ResponsiveContainer width="100%" height="85%">
@@ -337,6 +605,9 @@ const Dashboard = () => {
                 <Grid item xs={12} sm={7}>
                   <Paper className={classes.projectManager} elevation={6}>Project Manager 2</Paper>
                 </Grid>
+                <div style={{ textAlign: 'left' }}>
+                <button type="button" onClick={generatePDFPM2} style={{ padding: "8px 16px", margin: "20px 10px 20px 75px", backgroundColor: "#cc0d00", color: "#fff", cursor: "pointer" }}>Generate Reports</button>
+                </div>
                 <Grid item xs={12} sm={7}>
                   <Paper className={classes.tableDescription} elevation={6}>Backlogs</Paper>
                   <ResponsiveContainer width="100%" height="85%">
@@ -398,6 +669,9 @@ const Dashboard = () => {
                 <Grid item xs={12} sm={7}>
                   <Paper className={classes.projectManager} elevation={6}>Project Manager 3</Paper>
                 </Grid>
+                <div style={{ textAlign: 'left' }}>
+                <button type="button" onClick={generatePDFPM3} style={{ padding: "8px 16px", margin: "20px 10px 20px 75px", backgroundColor: "#cc0d00", color: "#fff", cursor: "pointer" }}>Generate Reports</button>
+                </div>
                 <Grid item xs={12} sm={7}>
                   <Paper className={classes.tableDescription} elevation={6}>Backlogs</Paper>
                   <ResponsiveContainer width="100%" height="85%">
@@ -459,6 +733,9 @@ const Dashboard = () => {
                 <Grid item xs={12} sm={7}>
                   <Paper className={classes.projectManager} elevation={6}>Project Manager 4</Paper>
                 </Grid>
+                <div style={{ textAlign: 'left' }}>
+                <button type="button" onClick={generatePDFPM4} style={{ padding: "8px 16px", margin: "20px 10px 20px 75px", backgroundColor: "#cc0d00", color: "#fff", cursor: "pointer" }}>Generate Reports</button>
+                </div>
                 <Grid item xs={12} sm={7}>
                   <Paper className={classes.tableDescription} elevation={6}>Backlogs</Paper>
                   <ResponsiveContainer width="100%" height="85%">
@@ -520,6 +797,9 @@ const Dashboard = () => {
                 <Grid item xs={12} sm={7}>
                   <Paper className={classes.projectManager} elevation={6}>Project Manager 5</Paper>
                 </Grid>
+                <div style={{ textAlign: 'left' }}>
+                <button type="button" onClick={generatePDFPM5} style={{ padding: "8px 16px", margin: "20px 10px 20px 75px", backgroundColor: "#cc0d00", color: "#fff", cursor: "pointer" }}>Generate Reports</button>
+                </div>
                 <Grid item xs={12} sm={7}>
                   <Paper className={classes.tableDescription} elevation={6}>Backlogs</Paper>
                   <ResponsiveContainer width="100%" height="85%">
