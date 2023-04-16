@@ -32,7 +32,7 @@ const Dashboard = () => {
 
   const projectsWithManager = [];
   for (let i = 2; i <= 6; i++) {
-    projectsWithManager.push(projects?.allProjects.filter(project => project.project_manager === i));
+    projectsWithManager.push(projects?.allProjects?.filter(project => project.project_manager === i));
   }
   const projectsPM1 = projectsWithManager[0];
   const projectsPM2 = projectsWithManager[1];

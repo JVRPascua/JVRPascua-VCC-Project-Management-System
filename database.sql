@@ -5,7 +5,8 @@ CREATE TABLE users(
     is_admin BOOLEAN DEFAULT FALSE,
     role VARCHAR(255),
     username VARCHAR(255),
-    password VARCHAR(255)
+    password VARCHAR(255),
+    email VARCHAR(255)
 );
 
 CREATE TABLE projects_tbl(

@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv'; 
 import pool from '../db.js';
-
+import nodemailer from 'nodemailer';
 dotenv.config();
 
 export const signin = async (req, res) => {
@@ -49,6 +49,70 @@ export const signin = async (req, res) => {
          };
         return;
     };
+
+const EMAIL_EXPIRY = 60 * 60; // email verification link expires after 1 hour
+
+const generateToken = (payload) => {
+    payload.redirect = true;
+    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: EMAIL_EXPIRY });
+};
+    
+export const emailverify = async (req, res) => {
+    const { email } = req.body;
+    const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    
+    if (user.rows.length === 0) {
+        return res.status(400).json({ message: 'Invalid email address' });
+    }
+    else{
+        const token = generateToken({ email });
+        let link; 
+        if (process.env.NODE_ENV === "production") {
+            link = `${process.env.APP_URL}changepasswordpage/${token}?redirect=true&email=${email}`;
+        }
+        else {
+            link = `http://localhost:3000/changepasswordpage/${token}?redirect=true&email=${email}`; 
+        }
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS
+            }
+        });
+
+        const mailOptions = {
+            from: process.env.SMTP_USER,
+            to: email,
+            subject: 'Verify your email',
+            html: `<p>Hi,</p><p>Click <a href="${link}">here</a> to change your password.</p>`
+        }
+        try {
+            transporter.sendMail(mailOptions);
+            res.status(200).json({ message: 'Email sent successfully' });
+        } catch (error) {
+            res.status(500).json({ message: 'Failed to send email' });
+        }
+    }
+};
+
+export const changepass = async (req, res) => {
+    const { formData, email } = req.body;
+    const password = formData.password;
+    const userEmail = email.email;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    let updatePassword;
+    try {
+        updatePassword = await pool.query("UPDATE users SET password = $1 WHERE email = $2", [hashedPassword, userEmail]);
+        res.status(200).json({ message: 'Password updated successfully!' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error changing password!' });
+    }
+}
+
 
 /* export const signup  =  async (req, res) => {
     const { is_admin, role, username, password } =  req.body;

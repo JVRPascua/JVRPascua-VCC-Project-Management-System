@@ -1,31 +1,34 @@
 import React, {useState} from "react";
-import { Link } from "react-router-dom";
-import { Container, Paper, Grid, TextField, InputAdornment, IconButton, Button } from "@mui/material";
+import { Container, Paper, Grid, TextField, Button, Typography, InputAdornment, IconButton } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { useDispatch } from 'react-redux';
 import { useNavigate} from "react-router-dom";
-import { signin } from '../../actions/auth';
+import { changePass } from '../../actions/auth';
 import Logo from "./Logo";
 import useStyles from './styles';
 import { motion } from "framer-motion";
 import { RootStyle, HeadingStyle, ContentStyle, fadeInUp } from "./styles2";
 
-const initialState = { username: '', password: '' };
+const initialState = { password: ''};
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('redirect') === 'true') {
+  const email = urlParams.get('email');
+  window.location.href = `/changepasswordpage?email=${email}`;
+}
 
-const Login = () => {
+const ChangePasswordPage = () => {
 
     const classes = useStyles();
-    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [formData, setFormData] = useState(initialState);
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
-    const [formData, setFormData] = useState(initialState);
+    const email = urlParams.get('email');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        dispatch(signin(formData, navigate))
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      await changePass(formData, {email: email}, navigate)
     }
 
     const handleChange = (e) => {
@@ -45,10 +48,8 @@ const Login = () => {
                 <Grid container spacing={1}>
                     <>
                     <Grid xs={10} md={12}>
-                        <TextField name="username" label="Enter Username" variant="outlined" required fullWidth="true" onChange={handleChange} type="text" autoFocus xs={6}/>
-                    </Grid>
-                    <Grid xs={10} md={12}>
-                    <TextField name="password" label='Enter Password' variant="outlined" fullWidth="true" required type={showPassword ? "text" : "password"} onChange={handleChange} 
+                        <Typography align="center"><strong>Change Password for {email}</strong></Typography>
+                        <TextField name="password" label='Enter Password' variant="outlined" fullWidth="true" required type={showPassword ? "text" : "password"} onChange={handleChange} 
                         InputProps={{
                             endAdornment: (
                             <InputAdornment position="end">
@@ -58,13 +59,14 @@ const Login = () => {
                             </InputAdornment>
                             )
                         }}
-                    />   
+                    /> 
+                    </Grid>
+                    <Grid xs={10} md={12}> 
                     </Grid>
                     </>
                 </Grid>
-                <Button type="submit" fullWidth="true" variant="contained" color="primary" className="classes.submit">Sign In</Button>
+                <Button type="submit" fullWidth="true" variant="contained" color="primary" className="classes.submit">Change Password</Button>
             </form>
-            <Button component={Link} to="/forgotpasswordpage" color="secondary">Forgot Password?</Button>
             </Paper>
             </Container>
         </ContentStyle>
@@ -74,4 +76,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ChangePasswordPage;

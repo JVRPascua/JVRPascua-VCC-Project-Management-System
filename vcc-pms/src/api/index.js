@@ -30,3 +30,5 @@ export const comment = (value, id, userId, projectId) => API.post(`/comments/${i
 export const fetchTaskComments = (id) => API.get(`/comments/${id}`);
 
 export const signIn = (formData) => API.post('/auth/signin', formData);
+export const emailVerify = (formData) => API.post('/auth/emailverify', formData);
+export const changePass = (formData, email) => API.post('/auth/changepass', {formData, email});
