@@ -59,15 +59,15 @@ export const emailverify = async (req, res) => {
     }
     
     const timestamp = Date.now();
-    const payload = { email, timestamp };
     const uniqueString = `${email}_${timestamp}`;
-    const token = jwt.sign(uniqueString, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const payload = { uniqueString };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
     
     let link;
     if (process.env.NODE_ENV === 'production') {
-        link = `${process.env.APP_URL}changepasswordpage/${token}?redirect=true&email=${email}`;
+        link = `${process.env.APP_URL}changepasswordpage?redirect=true&email=${email}&token=${token}`;
     } else {
-        link = `http://localhost:3000/changepasswordpage/${token}?redirect=true&email=${email}`;
+        link = `http://localhost:3000/changepasswordpage?redirect=true&email=${email}&token=${token}`;
     }
     
     const transporter = nodemailer.createTransport({
@@ -91,35 +91,6 @@ export const emailverify = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Failed to send email' });
         }
-    };
-    
-export const verifyToken = (req, res, next) => {
-    const { token } = req.params;
-    const { email } = req.query;
-    
-    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-        if (err) {
-          console.error(err);
-          return res.status(400).json({ message: 'Invalid token' });
-        }
-    
-        const uniqueString = decoded;
-        const [decodedEmail, timestamp] = uniqueString.split('_');
-    
-        if (decodedEmail !== email) {
-          return res.status(400).json({ message: 'Invalid email' });
-        }
-    
-        const tokenCreatedAt = parseInt(timestamp, 10) / 1000;
-        const now = Math.floor(Date.now() / 1000);
-    
-        if (now - tokenCreatedAt > EMAIL_EXPIRY) {
-          return res.status(400).json({ message: 'Token has expired' });
-        }
-    
-        req.email = email;
-        next();
-      });
     };
 
 export const changepass = async (req, res) => {

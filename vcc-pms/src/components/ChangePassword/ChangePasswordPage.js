@@ -10,12 +10,7 @@ import useStyles from './styles';
 import { motion } from "framer-motion";
 import { RootStyle, HeadingStyle, ContentStyle, fadeInUp } from "./styles2";
 
-const initialState = { password: ''};
-const urlParams = new URLSearchParams(window.location.search);
-const email = urlParams.get('email');
-if (urlParams.get('redirect') === 'true') {
-  window.location.href = `/changepasswordpage?email=${email}`;
-}
+const initialState = { password: "" };
 
 const verifyToken = (token) => {
   try {
@@ -29,34 +24,39 @@ const verifyToken = (token) => {
     return false; // token is invalid
   }
 };
+const urlParams = new URLSearchParams(window.location.search);
+const email = urlParams.get("email");
+const token = urlParams.get("token");
+if (urlParams.get("redirect") === "true" && token) {
+  window.location.href = `/changepasswordpage?email=${email}&token=${token}`;
+}
 
 const ChangePasswordPage = () => {
+  const classes = useStyles();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState(initialState);
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = () => setShowPassword(!showPassword);
+  const email = urlParams.get("email");
+  const token = urlParams.get("token");
 
-    const classes = useStyles();
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState(initialState);
-    const [showPassword, setShowPassword] = useState(false);
-    const handleClickShowPassword = () => setShowPassword(!showPassword);
-    const handleMouseDownPassword = () => setShowPassword(!showPassword);
-    const email = urlParams.get('email');
-    const token = urlParams.get('token');
-
-    useEffect(() => {
-      if (!email || !token) {
-        navigate('/loginpage');
-      } else if (!verifyToken(token)) {
-        navigate('/loginpage');
-      }
-    }, [email, token, navigate]);
-    
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      await changePass(formData, email, navigate)
+  useEffect(() => {
+    if (!email || !token) {
+      navigate("/loginpage");
+    } else if (!verifyToken(token)) {
+      navigate("/loginpage");
     }
+  }, [email, token, navigate]);
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value })
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await changePass(formData, email, navigate);
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   return (
     <RootStyle>
