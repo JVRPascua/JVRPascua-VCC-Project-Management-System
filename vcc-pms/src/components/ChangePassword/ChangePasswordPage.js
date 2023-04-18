@@ -11,22 +11,21 @@ import { motion } from "framer-motion";
 import { RootStyle, HeadingStyle, ContentStyle, fadeInUp } from "./styles2";
 
 const initialState = { password: "" };
-
+const urlParams = new URLSearchParams(window.location.search);
+const email = urlParams.get("email");
+const token = urlParams.get("token");
 const verifyToken = (token) => {
   try {
     const decoded = jwt_decode(token);
     const { exp } = decoded;
     if (exp < Date.now() / 1000) {
-      return false; // token expired
+      return false;
     }
-    return true; // token is valid
+    return true;
   } catch (err) {
-    return false; // token is invalid
+    return false;
   }
 };
-const urlParams = new URLSearchParams(window.location.search);
-const email = urlParams.get("email");
-const token = urlParams.get("token");
 if (urlParams.get("redirect") === "true" && token) {
   window.location.href = `/changepasswordpage?email=${email}&token=${token}`;
 }
