@@ -50,12 +50,6 @@ export const signin = async (req, res) => {
         return;
     };
 
-const EMAIL_EXPIRY = 60 * 60; // email verification link expires after 1 hour
-const generateToken = (payload) => {
-    payload.redirect = true;
-    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: EMAIL_EXPIRY });
-};
-    
 export const emailverify = async (req, res) => {
     const { email } = req.body;
     const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -63,36 +57,70 @@ export const emailverify = async (req, res) => {
     if (user.rows.length === 0) {
         return res.status(400).json({ message: 'Invalid email address' });
     }
-    else{
-        const token = generateToken({ email });
-        let link; 
-        if (process.env.NODE_ENV === "production") {
-            link = `${process.env.APP_URL}changepasswordpage/${token}?redirect=true&email=${email}`;
-        }
-        else {
-            link = `http://localhost:3000/changepasswordpage/${token}?redirect=true&email=${email}`; 
-        }
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS
-            }
-        });
-        const mailOptions = {
-            from: process.env.SMTP_USER,
-            to: email,
-            subject: 'Verify your email',
-            html: `<p>Hi,</p><p>Click <a href="${link}">here</a> to change your password.</p>`
-        }
-        try {
-            transporter.sendMail(mailOptions);
-            res.status(200).json({ message: 'Email sent successfully' });
-        } catch (error) {
-            res.status(500).json({ message: 'Failed to send email' });
-        }
+    
+    const timestamp = Date.now();
+    const payload = { email, timestamp };
+    const uniqueString = `${email}_${timestamp}`;
+    const token = jwt.sign(uniqueString, process.env.JWT_SECRET, { expiresIn: '1h' });
+    
+    let link;
+    if (process.env.NODE_ENV === 'production') {
+        link = `${process.env.APP_URL}changepasswordpage/${token}?redirect=true&email=${email}`;
+    } else {
+        link = `http://localhost:3000/changepasswordpage/${token}?redirect=true&email=${email}`;
     }
-};
+    
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+    });
+    
+    const mailOptions = {
+        from: process.env.SMTP_USER,
+        to: email,
+        subject: 'Verify your email',
+        html: `<p>Hi,</p><p>Click <a href="${link}">here</a> to change your password.</p>`,
+    };
+    
+    try {
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: 'Email sent successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to send email' });
+        }
+    };
+    
+export const verifyToken = (req, res, next) => {
+    const { token } = req.params;
+    const { email } = req.query;
+    
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+        if (err) {
+          console.error(err);
+          return res.status(400).json({ message: 'Invalid token' });
+        }
+    
+        const uniqueString = decoded;
+        const [decodedEmail, timestamp] = uniqueString.split('_');
+    
+        if (decodedEmail !== email) {
+          return res.status(400).json({ message: 'Invalid email' });
+        }
+    
+        const tokenCreatedAt = parseInt(timestamp, 10) / 1000;
+        const now = Math.floor(Date.now() / 1000);
+    
+        if (now - tokenCreatedAt > EMAIL_EXPIRY) {
+          return res.status(400).json({ message: 'Token has expired' });
+        }
+    
+        req.email = email;
+        next();
+      });
+    };
 
 export const changepass = async (req, res) => {
     const { formData, email } = req.body;

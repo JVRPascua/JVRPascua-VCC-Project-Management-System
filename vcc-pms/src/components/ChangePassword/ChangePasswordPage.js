@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import jwt_decode from "jwt-decode";
 import { Container, Paper, Grid, TextField, Button, Typography, InputAdornment, IconButton } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -16,6 +17,19 @@ if (urlParams.get('redirect') === 'true') {
   window.location.href = `/changepasswordpage?email=${email}`;
 }
 
+const verifyToken = (token) => {
+  try {
+    const decoded = jwt_decode(token);
+    const { exp } = decoded;
+    if (exp < Date.now() / 1000) {
+      return false; // token expired
+    }
+    return true; // token is valid
+  } catch (err) {
+    return false; // token is invalid
+  }
+};
+
 const ChangePasswordPage = () => {
 
     const classes = useStyles();
@@ -25,12 +39,16 @@ const ChangePasswordPage = () => {
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
     const email = urlParams.get('email');
+    const token = urlParams.get('token');
+
     useEffect(() => {
-      if (!email) {
+      if (!email || !token) {
+        navigate('/loginpage');
+      } else if (!verifyToken(token)) {
         navigate('/loginpage');
       }
-    }, [email, navigate]);
-
+    }, [email, token, navigate]);
+    
     const handleSubmit = async (e) => {
       e.preventDefault();
       await changePass(formData, email, navigate)
