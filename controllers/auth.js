@@ -51,7 +51,6 @@ export const signin = async (req, res) => {
     };
 
 const EMAIL_EXPIRY = 60 * 60; // email verification link expires after 1 hour
-
 const generateToken = (payload) => {
     payload.redirect = true;
     return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: EMAIL_EXPIRY });
@@ -73,7 +72,6 @@ export const emailverify = async (req, res) => {
         else {
             link = `http://localhost:3000/changepasswordpage/${token}?redirect=true&email=${email}`; 
         }
-
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -81,7 +79,6 @@ export const emailverify = async (req, res) => {
                 pass: process.env.SMTP_PASS
             }
         });
-
         const mailOptions = {
             from: process.env.SMTP_USER,
             to: email,

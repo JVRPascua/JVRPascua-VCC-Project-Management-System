@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Container, Paper, Grid, TextField, Button, Typography, InputAdornment, IconButton } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -11,8 +11,8 @@ import { RootStyle, HeadingStyle, ContentStyle, fadeInUp } from "./styles2";
 
 const initialState = { password: ''};
 const urlParams = new URLSearchParams(window.location.search);
+const email = urlParams.get('email');
 if (urlParams.get('redirect') === 'true') {
-  const email = urlParams.get('email');
   window.location.href = `/changepasswordpage?email=${email}`;
 }
 
@@ -25,10 +25,15 @@ const ChangePasswordPage = () => {
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
     const email = urlParams.get('email');
+    useEffect(() => {
+      if (!email) {
+        navigate('/loginpage');
+      }
+    }, [email, navigate]);
 
     const handleSubmit = async (e) => {
       e.preventDefault();
-      await changePass(formData, {email: email}, navigate)
+      await changePass(formData, email, navigate)
     }
 
     const handleChange = (e) => {
