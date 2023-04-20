@@ -143,51 +143,53 @@ return (
         </Drawer>
       </Box>
     )}
+<Box
+  sx={{
+    width: { xs: '100%', sm: '100%', md: 'auto' },
+    display: { xs: 'flex', sm: 'flex', md: 'flex', lg: 'none' },
+    justifyContent: 'flex-start',
+  }}
+>
+  {isOpen ? null : (
+    <IconButton
+      color="inherit"
+      aria-label="open sidebar"
+      onClick={handleDrawerOpen}
+      sx={{ display: { xs: 'block', md: 'none' } }}
+    >
+      <MenuIcon />
+    </IconButton>
+  )}
+  {isDesktop && isOpen && (
+    <Toolbar>
+      <AccountBoxIcon />
+      <strong>{currentUser[userId]}</strong>
+    </Toolbar>
+  )}
+  {!isDesktop && isOpen && (
     <Box
+      component="nav"
       sx={{
-        width: { xs: '100%', sm: '100%', md: 'auto' },
-        display: { xs: 'flex', sm: 'flex', md: 'flex', lg: 'none' },
-        justifyContent: 'flex-start',
+        width: 240,
+        borderRadius: '25px',
+        backgroundColor: '#FAACA8',
+        backgroundImage: `linear-gradient(0deg, #FF1913 5%, #FFFFFF 95%)`,
+        position: 'absolute',
+        top: 64,
+        left: 0,
+        bottom: 0,
+        transition: 'all 0.2s ease-in-out',
+        zIndex: 1201,
       }}
     >
-      <IconButton
-        color="inherit"
-        aria-label="open sidebar"
-        onClick={handleDrawerOpen}
-        sx={{ display: { xs: 'block', md: 'none' } }}
-      >
-        <MenuIcon />
-      </IconButton>
-      {isDesktop && isOpen && (
-        <Toolbar>
-          <AccountBoxIcon />
-          <strong>{currentUser[userId]}</strong>
-        </Toolbar>
-      )}
-      {!isDesktop && isOpen && (
-        <Box
-          component="nav"
-          sx={{
-            width: 240,
-            borderRadius: '25px',
-            backgroundColor: '#FAACA8',
-            backgroundImage: `linear-gradient(0deg, #FF1913 5%, #FFFFFF 95%)`,
-            position: 'absolute',
-            top: 64,
-            left: 0,
-            bottom: 0,
-            transition: 'all 0.2s ease-in-out',
-            zIndex: 1201,
-          }}
+      <Toolbar sx={{ justifyContent: 'flex-end' }}>
+        <IconButton
+          color="inherit"
+          aria-label="close sidebar"
+          onClick={handleDrawerClose}
+          sx={{ ml: 'auto' }}
         >
-        <Toolbar sx={{ justifyContent: 'flex-end' }}>
-          <IconButton
-            color="inherit"
-            aria-label="close sidebar"
-            onClick={handleDrawerClose}
-            sx={{ ml: 'auto' }}
-          >
-            <CloseIcon />
+          <CloseIcon />
           </IconButton>
         </Toolbar>
         <Toolbar>

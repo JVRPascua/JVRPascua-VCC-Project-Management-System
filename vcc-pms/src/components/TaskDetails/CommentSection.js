@@ -39,32 +39,32 @@ const CommentSection = ({ task }) => {
         commentsRef.current?.scrollIntoView({behavior: 'smooth'});
       }, [taskComments]);
 
-    return (
+      return (
         <div>
-            <div className={classes.CommentsOuterContainer}>
-                <div className={classes.CommentsInnerContainer}>
-                    <Typography gutterBottom marginTop marginLeft variant="h6"><strong>Comments</strong></Typography>
-                    <Divider />
-                    {taskComments?.map((comment) => (
-                    <Typography marginTop key={comment.id} align="left" marginLeft gutterBottom variant="subtitle1">
-                    <strong>{commentUser[comment.comment_user]}: </strong>
-                    {comment.comment_text}
-                    {comment.comment_image && typeof comment.comment_image === 'string' && comment.comment_image.startsWith('\\x') &&
+          <div className={classes.CommentsOuterContainer}>
+            <div className={classes.CommentsInnerContainer}>
+              <Typography gutterBottom marginTop marginLeft variant="h6"><strong>Comments</strong></Typography>
+              <Divider />
+              {taskComments?.map((comment) => (
+                <Typography marginTop key={comment.id} align="left" marginLeft gutterBottom variant="subtitle1">
+                  <strong>{commentUser[comment.comment_user]}: </strong>
+                  {comment.comment_text}
+                  {comment.comment_image && typeof comment.comment_image === 'string' && comment.comment_image.startsWith('\\x') &&
                     <img src={`data:image/jpeg;base64,${Buffer.from(comment.comment_image.slice(2), 'hex').toString('base64')}`} alt=" " height="300" width="450"/>
-                    }
-                    </Typography>
-                    ))}
-                <div ref={commentsRef} />
-                </div>
-                <div style={{ width: '90%', marginLeft: '5%', marginBottom: '5%' }}>
-                    <Typography gutterBottom variant="h6"><strong>Write a Comment</strong></Typography>
-                    <TextField fullWidth rows={4} variant="outlined" label="Comment" multiline value={comment.commentText} onChange={(e) => setComment({...comment, commentText: e.target.value})} />
-                    <div><FileBase type="image" multiple={false} onDone={({ base64 }) => setComment({ ...comment, selectedFile: base64 })} /></div>
-                    <Button style={{marginTop: '10px'}} fullWidth disabled={!comment.commentText} variant="contained" onClick={handleClick}>Comment</Button>
-                </div>
+                  }
+                </Typography>
+              ))}
+              <div ref={commentsRef} />
             </div>
+            <div style={{ width: '90%', marginLeft: '5%', marginBottom: '5%' }}>
+              <Typography gutterBottom variant="h6"><strong>Write a Comment</strong></Typography>
+              <TextField fullWidth rows={4} variant="outlined" label="Comment" multiline value={comment.commentText} onChange={(e) => setComment({...comment, commentText: e.target.value})} />
+              <div><FileBase type="image" multiple={false} onDone={({ base64 }) => setComment({ ...comment, selectedFile: base64 })} /></div>
+              <Button style={{marginTop: '10px'}} fullWidth disabled={!comment.commentText} variant="contained" onClick={handleClick}>Comment</Button>
+            </div>
+          </div>
         </div>
-    )
+      );      
 }
 
 export default CommentSection;
