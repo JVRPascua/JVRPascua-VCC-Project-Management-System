@@ -10,7 +10,7 @@ import FormTask from '../../Form/FormTask';
 
 import useStyles from './styles';
 
-const Task = ({id, task, setCurrentId, currentId }) => {
+const Task = ({task, setCurrentId, currentId }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const navigate = useNavigate();
