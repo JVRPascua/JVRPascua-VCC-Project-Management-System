@@ -14,14 +14,12 @@ const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
 const queryClient = new QueryClient();
 
-const MemoizedApp = memo(App);
-
 const root = ReactDOMClient.createRoot(document.getElementById('root'));
 root.render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <MemoizedApp />
+          <App />
         </BrowserRouter>
       </QueryClientProvider>
     </Provider>

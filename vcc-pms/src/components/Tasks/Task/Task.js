@@ -56,16 +56,6 @@ const Task = ({task, setCurrentId, currentId }) => {
                 </div>
             </div>
             <div className={classes.overlay2}>
-            <>
-            <Button style={{color: 'white'}} size="small" onClick={() => { setCurrentId(task.tasks_id); handleOpen(); }}>
-                <MoreHorizIcon fontSize="default" />
-            </Button>
-            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-                <Box className={classes.box}>
-                    <FormTask currentId={currentId} setCurrentId={setCurrentId}/>
-                </Box>
-            </Modal>
-            </>
             </div> 
             <ButtonBase component="span" className={classes.cardActions} onClick={openTask}>
             <CardContent>
